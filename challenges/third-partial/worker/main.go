@@ -1,22 +1,26 @@
 package main
 
 import (
+
 	"context"
+	"crypto/rand"
 	"flag"
 	"fmt"
+	pb "github.com/CodersSquad/dc-labs/challenges/third-partial/proto"
+
+	"google.golang.org/grpc"
 	"log"
+	"math/big"
+	"nanomsg.org/go/mangos/v2/protocol/respondent"
 	"net"
 	"os"
-
-	pb "github.com/CodersSquad/dc-labs/challenges/third-partial/proto"
-	"go.nanomsg.org/mangos"
-	"go.nanomsg.org/mangos/protocol/sub"
-	"google.golang.org/grpc"
+	"strconv"
+	"time"
 
 	// register transports
-	_ "go.nanomsg.org/mangos/transport/all"
+	_ "nanomsg.org/go/mangos/v2/transport/all"
 )
-
+import  mangos "nanomsg.org/go/mangos/v2"
 var (
 	defaultRPCPort = 50051
 )
@@ -54,26 +58,44 @@ func joinCluster() {
 	var sock mangos.Socket
 	var err error
 	var msg []byte
-
-	if sock, err = sub.NewSocket(); err != nil {
+	var name="BOB"
+	if sock, err = respondent.NewSocket(); err != nil {
 		die("can't get new sub socket: %s", err.Error())
 	}
 
 	log.Printf("Connecting to controller on: %s", controllerAddress)
-	if err = sock.Dial(controllerAddress); err != nil {
-		die("can't dial on sub socket: %s", err.Error())
-	}
-	// Empty byte array effectively subscribes to everything
-	err = sock.SetOption(mangos.OptionSubscribe, []byte(""))
-	if err != nil {
-		die("cannot subscribe: %s", err.Error())
-	}
-	for {
+
+	for{
 		if msg, err = sock.Recv(); err != nil {
 			die("Cannot recv: %s", err.Error())
 		}
-		log.Printf("Message-Passing: Worker(%s): Received %s\n", workerName, string(msg))
+		fmt.Printf("CLIENT(%s): RECEIVED \"%s\" SURVEY REQUEST\n",
+			name, string(msg))
+		port := getAvailablePort()
+		fmt.Printf("CLIENT(%s): SENDING DATE SURVEY RESPONSE\n", name)
+		t := time.Now()
+		tf := t.Format("2006-01-02 15:04:05-07:00")
+		usage, err := rand.Int(rand.Reader, big.NewInt(100))
+
+		if err != nil {
+			panic(err)
+		}
+		conn, err:= net.Dial("udp","8.8.8:80")
+		IP:=""
+		if(err!=nil){
+			IP="not found"
+
+		}else{
+			IP=conn.LocalAddr().(*net.UDPAddr).String()
+		}
+
+		workerMetadata := workerName + "*" + tags + "*" + IP + "*" + strconv.Itoa(port) + "*" + tf + "*" + usage.String()
+		if err = sock.Send([]byte(workerMetadata)); err != nil {
+			die("Cannot send: %s", err.Error())
+		}
 	}
+
+
 }
 
 func getAvailablePort() int {

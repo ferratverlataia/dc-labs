@@ -6,7 +6,7 @@ import (
 	"crypto/rand"
 	"flag"
 	"fmt"
-	pb "github.com/CodersSquad/dc-labs/challenges/third-partial/proto"
+	pb "github.com/ferratverlataia/dc-labs/challenges/third-partial/proto@third-partial"
 
 	"google.golang.org/grpc"
 	"log"
@@ -73,8 +73,7 @@ func joinCluster() {
 			name, string(msg))
 		port := getAvailablePort()
 		fmt.Printf("CLIENT(%s): SENDING DATE SURVEY RESPONSE\n", name)
-		t := time.Now()
-		tf := t.Format("2006-01-02 15:04:05-07:00")
+		t := time.Now().Format("2006-01-02 15:04:05-07:00")
 		usage, err := rand.Int(rand.Reader, big.NewInt(100))
 
 		if err != nil {
@@ -89,7 +88,7 @@ func joinCluster() {
 			IP=conn.LocalAddr().(*net.UDPAddr).String()
 		}
 
-		workerMetadata := workerName + "*" + tags + "*" + IP + "*" + strconv.Itoa(port) + "*" + tf + "*" + usage.String()
+		workerMetadata := workerName + "*" + tags + "*" + IP + "*" + strconv.Itoa(port) + "*" + t + "*" + usage.String()
 		if err = sock.Send([]byte(workerMetadata)); err != nil {
 			die("Cannot send: %s", err.Error())
 		}

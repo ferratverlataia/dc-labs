@@ -6,8 +6,8 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/CodersSquad/dc-labs/challenges/third-partial/controller"
-	"github.com/CodersSquad/dc-labs/challenges/third-partial/scheduler"
+	"github.com/ferratverlataia/dc-labs/challenges/third-partial/controller"
+	"github.com/ferratverlataia/dc-labs/challenges/third-partial/scheduler"
 )
 
 func main() {
@@ -20,6 +20,7 @@ func main() {
 	jobs := make(chan scheduler.Job)
 	go scheduler.Start(jobs)
 	// Send sample jobs
+
 	sampleJob := scheduler.Job{Address: "localhost:50051", RPCName: "hello"}
 
 	for {

@@ -85,7 +85,7 @@ func login(c *gin.Context){
 func main(){
 	r:= gin.Default()
 	r.Use()
-	authorization:=r.Group("/",gin.BasicAuth(gin.Accounts{"lala":"mclovin","york":"mribs"}))
+	authorization:=r.Group("/",gin.BasicAuth(gin.Accounts{"user":"mclovin","york":"mribs"}))
 	authorization.GET("/login", login)
 	authorization.GET("/logout", logoff)
 	authorization.GET("/status", status)

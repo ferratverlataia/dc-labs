@@ -34,13 +34,13 @@ func Start() {
 		die("can't listen on pub socket: %s", err.Error())
 	}
 	err= sock.SetOption(mangos.OptionSurveyTime,time.Second/2)
-	if(err!=nil){
+	if err!=nil{
 
 		die("SetOption(): %s",err.Error())
 
 	}
 	for {
-
+	time.Sleep(time.Second)
 		d := date()
 		log.Printf("Controller: Publishing Date %s\n", d)
 		if err = sock.Send([]byte("DATE")); err != nil {

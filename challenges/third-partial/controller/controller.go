@@ -43,7 +43,7 @@ func Start() {
 
 		d := date()
 		log.Printf("Controller: Publishing Date %s\n", d)
-		if err = sock.Send([]byte(d)); err != nil {
+		if err = sock.Send([]byte("DATE")); err != nil {
 			die("Failed publishing: %s", err.Error())
 		}
 		time.Sleep(time.Second * 3)

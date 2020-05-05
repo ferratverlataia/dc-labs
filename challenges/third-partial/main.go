@@ -2,12 +2,11 @@ package main
 
 import (
 	"fmt"
+	"github.com/ferratverlataia/dc-labs/challenges/third-partial/controller"
+	"github.com/ferratverlataia/dc-labs/challenges/third-partial/scheduler"
 	"log"
 	"math/rand"
 	"time"
-	api "github.com/ferratverlataia/dc-labs/challenges/third-partial/api"
-	 "github.com/ferratverlataia/dc-labs/challenges/third-partial/controller"
-	 "github.com/ferratverlataia/dc-labs/challenges/third-partial/scheduler"
 )
 
 func main() {

@@ -48,12 +48,12 @@ func Start() {
 		}
 		time.Sleep(time.Second * 3)
 
-			fmt.Printf("receiving data")
+			fmt.Printf("receiving data \n")
 			if msg,err =sock.Recv(); err != nil{
-				fmt.Printf("Cannot recv: %s", err.Error())
+				fmt.Printf("Cannot recv: %s\n", err.Error())
 				continue
 			}
-	fmt.Printf("Server Succesfully received response *%s*",string(msg) )
+	fmt.Printf("Server Succesfully received response:  %s \n",string(msg) )
 
 	}
 }

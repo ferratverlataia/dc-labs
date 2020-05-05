@@ -25,7 +25,7 @@ func date() string {
 func Start() {
 	var sock mangos.Socket
 	var err error
-	//var msg []byte
+	var msg []byte
 
 	if sock, err = surveyor.NewSocket(); err != nil {
 		die("can't get new pub socket: %s", err)
@@ -48,8 +48,7 @@ func Start() {
 		}
 		time.Sleep(time.Second * 3)
 		for{
-			msg,err:=sock.Recv()
-			if  err != nil{
+			if msg,err =sock.Recv(); err != nil{
 				break
 			}
 	fmt.Printf("Server Succesfully received response *%s*",string(msg) )

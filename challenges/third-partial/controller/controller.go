@@ -3,10 +3,10 @@ package controller
 import (
 	"fmt"
 	"log"
+	mangos "nanomsg.org/go/mangos/v2"
 	"nanomsg.org/go/mangos/v2/protocol/surveyor"
 	"os"
 	"time"
-	mangos "nanomsg.org/go/mangos/v2"
 	// register transports
 	_ "nanomsg.org/go/mangos/v2/transport/all"
 )

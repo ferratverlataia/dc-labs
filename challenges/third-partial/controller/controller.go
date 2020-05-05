@@ -3,7 +3,6 @@ package controller
 import (
 	"fmt"
 	"log"
-	mangos "nanomsg.org/go/mangos/v2"
 	"nanomsg.org/go/mangos/v2/protocol/surveyor"
 	"os"
 	"time"
@@ -26,6 +25,8 @@ func date() string {
 func Start() {
 	var sock mangos.Socket
 	var err error
+	//var msg []byte
+
 	if sock, err = surveyor.NewSocket(); err != nil {
 		die("can't get new pub socket: %s", err)
 	}
@@ -33,7 +34,7 @@ func Start() {
 		die("can't listen on pub socket: %s", err.Error())
 	}
 	for {
-		// Could also use sock.RecvMsg to get header
+
 		d := date()
 		log.Printf("Controller: Publishing Date %s\n", d)
 		if err = sock.Send([]byte(d)); err != nil {

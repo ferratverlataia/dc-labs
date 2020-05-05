@@ -20,7 +20,7 @@ import (
 	// register transports
 	_ "nanomsg.org/go/mangos/v2/transport/all"
 )
-import  mangos "nanomsg.org/go/mangos/v2"
+import "nanomsg.org/go/mangos/v2"
 var (
 	defaultRPCPort = 50051
 )
@@ -58,7 +58,7 @@ func joinCluster() {
 	var sock mangos.Socket
 	var err error
 	var msg []byte
-	var name="BOB"
+	var name="1"
 	if sock, err = respondent.NewSocket(); err != nil {
 		die("can't get new sub socket: %s", err.Error())
 	}
@@ -73,7 +73,7 @@ func joinCluster() {
 			name, string(msg))
 		port := getAvailablePort()
 		fmt.Printf("CLIENT(%s): SENDING DATE SURVEY RESPONSE\n", name)
-		t := time.Now().Format("2006-01-02 15:04:05-07:00")
+		t := time.Now().Format(time.ANSIC)
 		usage, err := rand.Int(rand.Reader, big.NewInt(100))
 
 		if err != nil {

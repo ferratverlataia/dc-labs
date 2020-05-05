@@ -1,4 +1,4 @@
-package main
+package api
 import (
 	"fmt"
 	"strconv"
@@ -82,7 +82,7 @@ func login(c *gin.Context){
 	}
 }
 
-func main(){
+func start(){
 	r:= gin.Default()
 	r.Use()
 	authorization:=r.Group("/",gin.BasicAuth(gin.Accounts{"user":"mclovin","york":"mribs"}))
@@ -94,5 +94,4 @@ func main(){
 
 
 }
-
 

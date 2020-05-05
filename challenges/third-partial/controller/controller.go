@@ -47,11 +47,13 @@ func Start() {
 			die("Failed publishing: %s", err.Error())
 		}
 		time.Sleep(time.Second * 3)
-		for{
+
+			fmt.Printf("receiving data")
 			if msg,err =sock.Recv(); err != nil{
-				break
+				fmt.Printf("Cannot recv: %s", err.Error())
+				continue
 			}
 	fmt.Printf("Server Succesfully received response *%s*",string(msg) )
-		}
+
 	}
 }

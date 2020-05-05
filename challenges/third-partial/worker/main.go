@@ -95,6 +95,7 @@ func joinCluster() {
 		}
 
 		workerMetadata := workerName + "*" + tags + "*" + IP + "*" + strconv.Itoa(port) + "*" + t + "*" + usage.String()
+		fmt.Printf("Worker meta data: %s",workerMetadata)
 		if err = sock.Send([]byte(workerMetadata)); err != nil {
 			die("Cannot send: %s", err.Error())
 		}

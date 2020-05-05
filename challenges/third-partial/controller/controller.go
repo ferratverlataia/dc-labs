@@ -6,7 +6,7 @@ import (
 	"nanomsg.org/go/mangos/v2/protocol/surveyor"
 	"os"
 	"time"
-
+	mangos "nanomsg.org/go/mangos/v2"
 	// register transports
 	_ "nanomsg.org/go/mangos/v2/transport/all"
 )
@@ -33,6 +33,12 @@ func Start() {
 	if err = sock.Listen(controllerAddress); err != nil {
 		die("can't listen on pub socket: %s", err.Error())
 	}
+	err= sock.SetOption(mangos.OptionSurveyTime,time.Second/2)
+	if(err!=nil){
+
+		die("SetOption(): %s",err.Error())
+
+	}
 	for {
 
 		d := date()
@@ -41,5 +47,12 @@ func Start() {
 			die("Failed publishing: %s", err.Error())
 		}
 		time.Sleep(time.Second * 3)
+		for{
+			msg,err:=sock.Recv()
+			if  err != nil{
+				break
+			}
+	fmt.Printf("Server Succesfully received response *%s*",string(msg) )
+		}
 	}
 }

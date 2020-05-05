@@ -20,7 +20,7 @@ import (
 	// register transports
 	_ "nanomsg.org/go/mangos/v2/transport/all"
 )
-import "nanomsg.org/go/mangos/v2"
+import mangos "nanomsg.org/go/mangos/v2"
 var (
 	defaultRPCPort = 50051
 )
@@ -65,7 +65,8 @@ func joinCluster() {
 
 	log.Printf("Connecting to controller on: %s", controllerAddress)
 
-	for{
+	for {
+		log.Printf("sending information petition")
 		if msg, err = sock.Recv(); err != nil {
 			die("Cannot recv: %s", err.Error())
 		}

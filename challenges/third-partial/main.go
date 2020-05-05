@@ -6,8 +6,8 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/ferratverlataia/dc-labs/challenges/third-partial/controller"
-	"github.com/ferratverlataia/dc-labs/challenges/third-partial/scheduler"
+	 "github.com/ferratverlataia/dc-labs/challenges/third-partial/controller"
+	 "github.com/ferratverlataia/dc-labs/challenges/third-partial/scheduler"
 )
 
 func main() {

@@ -6,7 +6,7 @@ import (
 	"crypto/rand"
 	"flag"
 	"fmt"
-	pb "github.com/ferratverlataia/dc-labs/challenges/third-partial/proto@third-partial"
+	pb "github.com/ferratverlataia/dc-labs/challenges/third-partial/proto"
 
 	"google.golang.org/grpc"
 	"log"

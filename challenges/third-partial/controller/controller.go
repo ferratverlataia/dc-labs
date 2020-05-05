@@ -3,14 +3,13 @@ package controller
 import (
 	"fmt"
 	"log"
+	mangos "nanomsg.org/go/mangos/v2"
+	"nanomsg.org/go/mangos/v2/protocol/surveyor"
 	"os"
 	"time"
 
-	"go.nanomsg.org/mangos"
-	"go.nanomsg.org/mangos/protocol/pub"
-
 	// register transports
-	_ "go.nanomsg.org/mangos/transport/all"
+	_ "nanomsg.org/go/mangos/v2/transport/all"
 )
 
 var controllerAddress = "tcp://localhost:40899"
@@ -27,7 +26,7 @@ func date() string {
 func Start() {
 	var sock mangos.Socket
 	var err error
-	if sock, err = pub.NewSocket(); err != nil {
+	if sock, err = surveyor.NewSocket(); err != nil {
 		die("can't get new pub socket: %s", err)
 	}
 	if err = sock.Listen(controllerAddress); err != nil {

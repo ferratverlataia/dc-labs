@@ -2,7 +2,9 @@ package scheduler
 
 import (
 	"context"
+	"fmt"
 	"log"
+	"math/rand"
 	"time"
 
 	pb "github.com/ferratverlataia/dc-labs/challenges/third-partial/proto"
@@ -35,6 +37,16 @@ func schedule(job Job) {
 		log.Fatalf("could not greet: %v", err)
 	}
 	log.Printf("Scheduler: RPC respose from %s : %s", job.Address, r.GetMessage())
+}
+func startjob(){
+	sampleJob := Job{Address: "localhost:50051", RPCName: "hello"}
+
+	for {
+		sampleJob.RPCName = fmt.Sprintf("hello-%v", rand.Intn(10000))
+		jobs <- sampleJob
+		time.Sleep(time.Second * 5)
+	}
+
 }
 
 func Start(jobs chan Job) error {

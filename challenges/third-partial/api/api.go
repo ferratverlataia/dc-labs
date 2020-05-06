@@ -1,6 +1,9 @@
 package api
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"os"
 	"strconv"
 	"time"
 	"net/http"
@@ -11,11 +14,30 @@ import (
 
 
 var usinformation = gin.H{
-	"lala":gin.H{"email":"mclovin@gmail.com","token":""},
+	"user":gin.H{"email":"mclovin@gmail.com","token":""},
 	"york":gin.H{"email":"york@gmail.com","token":""},
 
 }
+func getworkers(c* gin.Context){
+	user:=c.MustGet(gin.AuthUserKey).(string)
+	dt := time. Now()
+	fmt.Println(maptokens)
+	Jsonfile,err :=os.Open("users.json")
+	bytevalue,_:= ioutil.ReadAll(Jsonfile)
+	if err!=nil{
+		c.JSON(http.StatusOK,gin.H{"message": "No workers are currently active",
+			"time": dt})
+	}
+	var rpcs map[string]interface{}
+	json.Unmarshal(bytevalue,&rpcs)
+	if _,usok:=maptokens[user];usok{
+		c.JSON(http.StatusOK,gin.H{"message": "Hi username, the DPIP System is Up and Running",
+			"time": dt})
+	}else{
+		c.AbortWithStatus(401)
+	}
 
+}
 func status(c* gin.Context){
 	user:=c.MustGet(gin.AuthUserKey).(string)
 	dt := time. Now()
@@ -82,14 +104,16 @@ func login(c *gin.Context){
 	}
 }
 
-func start(){
+func Start(){
 	r:= gin.Default()
 	r.Use()
-	authorization:=r.Group("/",gin.BasicAuth(gin.Accounts{"user":"mclovin","york":"mribs"}))
+	authorization:=r.Group("/",gin.BasicAuth(gin.Accounts{"user":"password","york":"mribs"}))
 	authorization.GET("/login", login)
 	authorization.GET("/logout", logoff)
 	authorization.GET("/status", status)
 	authorization.GET("/upload", uploadfile)
+	authorization.GET("/status",getworkers)
+
 	r.Run(":8080")
 
 

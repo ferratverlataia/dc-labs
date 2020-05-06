@@ -71,6 +71,7 @@ func joinCluster() {
 	log.Printf("Connecting to controller on: %s", controllerAddress)
 
 	for {
+
 		log.Printf("sending information petition")
 		if msg, err = sock.Recv(); err != nil {
 			die("Cannot recv: %s", err.Error())
@@ -85,19 +86,22 @@ func joinCluster() {
 		if err != nil {
 			panic(err)
 		}
-		conn, err:= net.Dial("udp","8.8.8:80")
 		IP:=""
-		if(err!=nil){
+		conn, err:= net.Dial("udp","8.8.8:80")
+
+		if err!=nil{
 			IP="not found"
 
 		}else{
 			IP=conn.LocalAddr().(*net.UDPAddr).String()
 		}
 
-		workerMetadata := workerName + "*" + tags + "*" + IP + "*" + strconv.Itoa(port) + "*" + t + "*" + usage.String()
-		if err = sock.Send([]byte(workerMetadata)); err != nil {
+		workeradata := workerName + "*" + tags + "*" + IP + "*" + strconv.Itoa(port) + "*" + t + "*" + usage.String()
+
+		if err = sock.Send([]byte(workeradata)); err != nil {
 			die("Cannot send: %s", err.Error())
 		}
+
 	}
 
 

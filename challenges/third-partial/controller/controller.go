@@ -1,11 +1,14 @@
 package controller
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	mangos "nanomsg.org/go/mangos/v2"
 	"nanomsg.org/go/mangos/v2/protocol/surveyor"
 	"os"
+	"strings"
 	"time"
 	// register transports
 	_ "nanomsg.org/go/mangos/v2/transport/all"
@@ -23,6 +26,12 @@ func date() string {
 }
 
 func Start() {
+
+	type employee struct {
+		worker ,tags,IP,port,usage string
+
+	}
+
 	var sock mangos.Socket
 	var err error
 	var msg []byte
@@ -47,13 +56,22 @@ func Start() {
 			die("Failed publishing: %s", err.Error())
 		}
 		time.Sleep(time.Second * 3)
+	for{
 
-			fmt.Printf("receiving data \n")
-			if msg,err =sock.Recv(); err != nil{
-				fmt.Printf("Cannot recv: %s\n", err.Error())
-				continue
-			}
-	fmt.Printf("Server Succesfully received response:  %s \n",string(msg) )
+		fmt.Printf("receiving data \n")
+		if msg,err =sock.Recv(); err != nil{
+			fmt.Printf("Cannot recv: %s\n", err.Error())
+			break
+		}
+
+		fmt.Printf("Server Succesfully received response:  %s \n",string(msg) )
+		 rpcmachine := strings.Split(string(msg),"*")
+
+			 file,_:=json.MarshalIndent( employee{worker:rpcmachine[0],tags:rpcmachine[1],IP:rpcmachine[2],port:rpcmachine[3],usage:rpcmachine[4]},"","")
+
+		 _=ioutil.WriteFile("test.json",file,0644)
+	}
+
 
 	}
 }

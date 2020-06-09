@@ -124,7 +124,7 @@ func Start() {
 	authorization.GET("/logout", logoff)
 	authorization.GET("/status", status)
 	authorization.POST("/upload", uploadfile)
-	authorization.GET("/status", getworkers)
+	//authorization.GET("/status", getworkers)
 
 	r.Run(":8080")
 

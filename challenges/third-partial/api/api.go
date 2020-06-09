@@ -62,11 +62,13 @@ func uploadfile(c *gin.Context) {
 	size := strconv.Itoa(int(header.Size))
 	out, err := os.Create(header.Filename+".png")
 	if err != nil {
+		c.AbortWithStatus(401)
 		log.Fatal(err)
 	}
 	defer out.Close()
 	_, err = io.Copy(out, file)
 	if err != nil {
+		c.AbortWithStatus(401)
 		log.Fatal(err)
 	}
 

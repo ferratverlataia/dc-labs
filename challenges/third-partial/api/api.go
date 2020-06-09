@@ -122,9 +122,10 @@ func Start() {
 	authorization := r.Group("/", gin.BasicAuth(gin.Accounts{"user": "password", "york": "mribs"}))
 	authorization.GET("/login", login)
 	authorization.GET("/logout", logoff)
-	authorization.GET("/status", status)
+	//authorization.GET("/status", status)
 	authorization.POST("/upload", uploadfile)
 	//authorization.GET("/status", getworkers)
+
 
 	r.Run(":8080")
 

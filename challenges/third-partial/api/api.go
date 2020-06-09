@@ -60,7 +60,7 @@ func uploadfile(c *gin.Context) {
 		return
 	}
 	size := strconv.Itoa(int(header.Size))
-	out, err := os.Create("../UserImages/"+header.Filename+".png")
+	out, err := os.Create("C:/Users/ivan-/Documents/GitHub/dc-labs/challenges/third-partial/UserImages/"+header.Filename+".png")
 	if err != nil {
 		log.Fatal(err)
 	}

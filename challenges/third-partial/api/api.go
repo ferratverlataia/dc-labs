@@ -60,7 +60,7 @@ func uploadfile(c *gin.Context) {
 		return
 	}
 	size := strconv.Itoa(int(header.Size))
-	out, err := os.Create(header.Filename+".png")
+	out, err := os.Create(""+header.Filename+".png")
 	if err != nil {
 		c.AbortWithStatus(401)
 		log.Fatal(err)

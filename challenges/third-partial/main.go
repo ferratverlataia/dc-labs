@@ -1,13 +1,10 @@
 package main
 
 import (
-	"fmt"
 	//"github.com/ferratverlataia/dc-labs/challenges/third-partial/controller"
 	//"github.com/ferratverlataia/dc-labs/challenges/third-partial/scheduler"
 	"github.com/ferratverlataia/dc-labs/challenges/third-partial/api"
 	"log"
-	"math/rand"
-	"time"
 )
 
 func main() {

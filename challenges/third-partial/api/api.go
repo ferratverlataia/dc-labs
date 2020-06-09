@@ -1,66 +1,76 @@
 package api
+
 import (
+	"crypto/rand"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
+	"log"
+	"net/http"
 	"os"
 	"strconv"
 	"time"
-	"net/http"
-	"crypto/rand"
+
 	"github.com/gin-gonic/gin"
 )
 
-
-
 var usinformation = gin.H{
-	"user":gin.H{"email":"mclovin@gmail.com","token":""},
-	"york":gin.H{"email":"york@gmail.com","token":""},
-
+	"user": gin.H{"email": "mclovin@gmail.com", "token": ""},
+	"york": gin.H{"email": "york@gmail.com", "token": ""},
 }
-func getworkers(c* gin.Context){
-	user:=c.MustGet(gin.AuthUserKey).(string)
-	dt := time. Now()
+
+func getworkers(c *gin.Context) {
+	user := c.MustGet(gin.AuthUserKey).(string)
+	dt := time.Now()
 	fmt.Println(maptokens)
-	Jsonfile,err :=os.Open("users.json")
-	bytevalue,_:= ioutil.ReadAll(Jsonfile)
-	if err!=nil{
-		c.JSON(http.StatusOK,gin.H{"message": "No workers are currently active",
+	Jsonfile, err := os.Open("users.json")
+	bytevalue, _ := ioutil.ReadAll(Jsonfile)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{"message": "No workers are currently active",
 			"time": dt})
 	}
 	var rpcs map[string]interface{}
-	json.Unmarshal(bytevalue,&rpcs)
-	if _,usok:=maptokens[user];usok{
-		c.JSON(http.StatusOK,gin.H{"message": "Hi username, the DPIP System is Up and Running",
+	json.Unmarshal(bytevalue, &rpcs)
+	if _, usok := maptokens[user]; usok {
+		c.JSON(http.StatusOK, gin.H{"message": "Hi username, the DPIP System is Up and Running",
 			"time": dt})
-	}else{
+	} else {
 		c.AbortWithStatus(401)
 	}
 
 }
-func status(c* gin.Context){
-	user:=c.MustGet(gin.AuthUserKey).(string)
-	dt := time. Now()
+func status(c *gin.Context) {
+	user := c.MustGet(gin.AuthUserKey).(string)
+	dt := time.Now()
 	fmt.Println(maptokens)
-	if _,usok:=maptokens[user];usok{
-		c.JSON(http.StatusOK,gin.H{"message": "Hi username, the DPIP System is Up and Running",
+	if _, usok := maptokens[user]; usok {
+		c.JSON(http.StatusOK, gin.H{"message": "Hi username, the DPIP System is Up and Running",
 			"time": dt})
-	}else{
+	} else {
 		c.AbortWithStatus(401)
 	}
 }
 
+func uploadfile(c *gin.Context) {
 
-func uploadfile(c*  gin.Context){
+	file, header, err := c.Request.FormFile("image")
 
-
-	_,header,err :=c.Request.FormFile("image")
-	if err!=nil{
+	if err != nil {
 		return
 	}
-	size:= strconv.Itoa(int(header.Size))
-	c.JSON(http.StatusOK,gin.H{"status":"SUCCESS","Filename":header.Filename,"filesize":size+" bytes"})
+	size := strconv.Itoa(int(header.Size))
+	out, err := os.Create("../UserImages/"+header.Filename+".png")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer out.Close()
+	_, err = io.Copy(out, file)
+	if err != nil {
+		log.Fatal(err)
+	}
 
+	c.JSON(http.StatusOK, gin.H{"status": "SUCCESS", "Filename": header.Filename, "filesize": size + " bytes"})
 
 
 }
@@ -70,11 +80,11 @@ func logoff(c *gin.Context) {
 
 	if _, usok := maptokens[user]; usok {
 
-		delete(maptokens,user)
+		delete(maptokens, user)
 		c.AbortWithStatus(401)
-		c.JSON(http.StatusOK,gin.H{"message": "Bye username, your token has been revoked" })
+		c.JSON(http.StatusOK, gin.H{"message": "Bye username, your token has been revoked"})
 		return
-	}else{
+	} else {
 		c.AbortWithStatus(401)
 
 	}
@@ -88,34 +98,32 @@ func generatetoken() string {
 }
 
 //it utilizes the user password to save
-var maptokens =make(map[string]string)
+var maptokens = make(map[string]string)
 
-func login(c *gin.Context){
-	user:=c.MustGet(gin.AuthUserKey).(string)
-	token:=generatetoken()
+func login(c *gin.Context) {
+	user := c.MustGet(gin.AuthUserKey).(string)
+	token := generatetoken()
 
-	maptokens[user]=token
+	maptokens[user] = token
 
-	if _,usok:=usinformation[user];usok{
-		c.JSON(http.StatusOK,gin.H{"message": "Hi username, welcome to the DPIP System",
+	if _, usok := usinformation[user]; usok {
+		c.JSON(http.StatusOK, gin.H{"message": "Hi username, welcome to the DPIP System",
 			"token": maptokens[user]})
-	}else{
+	} else {
 		c.AbortWithStatus(401)
 	}
 }
 
-func Start(){
-	r:= gin.Default()
+func Start() {
+	r := gin.Default()
 	r.Use()
-	authorization:=r.Group("/",gin.BasicAuth(gin.Accounts{"user":"password","york":"mribs"}))
+	authorization := r.Group("/", gin.BasicAuth(gin.Accounts{"user": "password", "york": "mribs"}))
 	authorization.GET("/login", login)
 	authorization.GET("/logout", logoff)
 	authorization.GET("/status", status)
 	authorization.GET("/upload", uploadfile)
-	authorization.GET("/status",getworkers)
+	authorization.GET("/status", getworkers)
 
 	r.Run(":8080")
 
-
 }
-

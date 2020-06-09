@@ -1,12 +1,12 @@
 package main
 
 import (
-
 	"context"
 	"crypto/rand"
 	"flag"
 	"fmt"
 	pb "github.com/ferratverlataia/dc-labs/challenges/third-partial/proto"
+	"image"
 
 	"google.golang.org/grpc"
 	"log"
@@ -17,6 +17,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/disintegration/gift"
 	// register transports
 	_ "nanomsg.org/go/mangos/v2/transport/all"
 )
@@ -41,6 +42,24 @@ func die(format string, v ...interface{}) {
 	os.Exit(1)
 }
 
+func filterimage( path string,filter string){
+src:= loadImage(path)
+switch  filter {
+case "blur":
+	g:=gift.New(gift.GaussianBlur(2))
+	dst:=image.NewRGBA(g.Bounds(src.Bounds()))
+	g.Draw(dst,src)
+	break;
+case "grayscale":
+	g:=gift.New(gift.Grayscale())
+	dst:=image.NewRGBA(g.Bounds(src.Bounds()))
+	g.Draw(dst,src)
+
+	break;
+
+}
+
+}
 // SayHello implements helloworld.GreeterServer
 func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
 	log.Printf("RPC: Received: %v", in.GetName())

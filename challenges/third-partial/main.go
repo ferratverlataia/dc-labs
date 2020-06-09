@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/ferratverlataia/dc-labs/challenges/third-partial/controller"
-	"github.com/ferratverlataia/dc-labs/challenges/third-partial/scheduler"
+	//"github.com/ferratverlataia/dc-labs/challenges/third-partial/controller"
+	//"github.com/ferratverlataia/dc-labs/challenges/third-partial/scheduler"
 	"github.com/ferratverlataia/dc-labs/challenges/third-partial/api"
 	"log"
 	"math/rand"
@@ -12,7 +12,7 @@ import (
 
 func main() {
 	log.Println("Welcome to the Distributed and Parallel Image Processing System")
-
+/*
 	// Start Controller
 	go controller.Start()
 
@@ -27,7 +27,7 @@ func main() {
 		jobs <- sampleJob
 		time.Sleep(time.Second * 5)
 	}
-
+   */
 	// API
 	// Here's where your API setup will be
 	api.Start()
